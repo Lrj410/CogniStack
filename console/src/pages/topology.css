@@ -1,0 +1,92 @@
+/* 拓扑页专属布局（前缀 tp-） */
+
+/* 宿主上报：每条报告一张面板,纵向堆叠 */
+.tp-reports {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stack-gap);
+}
+
+/* 端口卡：左侧 3px 状态条是唯一的色彩编码,其余保持中性 */
+.tp-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  min-width: 0;
+  padding: var(--sp-4) var(--sp-5);
+  border: 1px solid var(--line);
+  border-inline-start: 3px solid var(--neutral);
+  border-radius: var(--r-2);
+  background: var(--surface-2);
+}
+
+.tp-card--unbound {
+  border-inline-start-color: var(--neutral);
+}
+
+.tp-card--contested {
+  border-inline-start-color: var(--warn);
+}
+
+.tp-card--wired {
+  border-inline-start-color: var(--brand);
+}
+
+.tp-label {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.tp-port {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  color: var(--fg-3);
+}
+
+.tp-line {
+  margin: 0;
+  font-size: var(--fs-xs);
+  color: var(--fg-2);
+}
+
+.tp-key {
+  margin-inline-end: var(--sp-2);
+  color: var(--fg-3);
+}
+
+.tp-val {
+  color: var(--fg);
+}
+
+.tp-shadow {
+  padding-block-start: var(--sp-2);
+  border-block-start: 1px solid var(--line);
+}
+
+.tp-shadow-title {
+  margin: 0;
+  font-size: var(--fs-micro);
+  color: var(--warn);
+}
+
+.tp-shadow-list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  margin: var(--sp-1) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.tp-shadow-item {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  color: var(--fg-2);
+}
+
+/* 面板头右侧的宿主 id：保留等宽,但过长时截断 */
+.tp-hostid {
+  max-inline-size: 200px;
+}

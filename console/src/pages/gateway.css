@@ -1,0 +1,327 @@
+/* 网关页专属工作台布局（前缀 gw-）。
+   严格满屏设计（Zero outer scroll），取色一律走 tokens。 */
+
+.gw-layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-4) var(--sp-6);
+  block-size: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  min-width: 0;
+}
+
+.gw-stats-grid {
+  display: grid;
+  gap: var(--sp-3);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex: 0 0 auto;
+}
+
+/* 窄窗口降到两列：四档读数挤在一行时脚注会被省略号吃掉（版式体检判为「读不到全串」）。
+   列数写死，不用 auto-fit —— 临界宽度会排出 N+1 这种一眼失衡的版式。 */
+@media (max-width: 900px) {
+  .gw-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.gw-split-layout {
+  display: grid;
+  gap: var(--sp-4);
+  grid-template-columns: minmax(340px, 400px) minmax(0, 1fr);
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  align-items: stretch;
+}
+
+@media (max-width: 900px) {
+  .gw-split-layout {
+    grid-template-columns: minmax(0, 1fr);
+    overflow-y: auto;
+  }
+}
+
+.gw-split-left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  min-height: 0;
+  block-size: 100%;
+  justify-content: space-between;
+}
+
+.gw-split-right {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  block-size: 100%;
+  overflow: hidden;
+}
+
+.gw-tab-panel {
+  display: flex;
+  flex-direction: column;
+  block-size: 100%;
+  min-height: 0;
+  flex: 1;
+}
+
+/* 只在网关工作台：面板头允许折行。
+   右栏窄到约 240px 时，右侧动作按钮会和四条页签抢同一行，把页签挤成两行；
+   折行后按钮退到第二行，页签反而能在一行内排完。 */
+.gw-tab-panel .panel-head {
+  flex-wrap: wrap;
+  row-gap: var(--sp-2);
+}
+
+.gw-card {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--surface-1);
+  box-shadow: var(--shadow-1);
+  min-width: 0;
+  flex: 1;
+  min-height: 0;
+  position: relative;
+  transition: border-color var(--dur-2) var(--ease);
+}
+
+.gw-card[data-active="true"] {
+  border-color: var(--brand);
+}
+
+.gw-card-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+}
+
+.gw-card-title {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-body);
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.gw-card-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  justify-content: center;
+  flex: 1;
+  min-width: 0;
+}
+
+.gw-row {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  font-size: var(--fs-xs);
+  min-width: 0;
+}
+
+.gw-label {
+  color: var(--fg-3);
+  font-weight: 500;
+  flex: 0 0 auto;
+}
+
+.gw-val {
+  min-width: 0;
+  text-align: end;
+}
+
+.gw-diag-box {
+  padding: var(--sp-4);
+  border-radius: var(--r-2);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.gw-empty-state {
+  padding: var(--sp-8) var(--sp-4);
+  text-align: center;
+  color: var(--fg-3);
+  font-size: var(--fs-xs);
+}
+
+.gw-audit-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  block-size: 100%;
+}
+
+.gw-audit-kpis {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-4);
+  background: var(--surface-2);
+  border-bottom: 1px solid var(--line);
+  flex: 0 0 auto;
+}
+
+.gw-audit-kpi-item {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.gw-audit-kpi-label {
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+}
+
+.gw-audit-kpi-val {
+  font-size: var(--fs-body);
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.gw-audit-toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  padding: var(--sp-2) var(--sp-4);
+  border-bottom: 1px solid var(--line);
+  background: var(--surface-1);
+  flex: 0 0 auto;
+}
+
+/* 微说明文字：与 se-hint 同语义，但属于网关页自己的版式层，
+   不跨页面借用其它页的类名（否则改设置页会连带改到这里）。 */
+.gw-hint {
+  margin: 0;
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+  line-height: 1.5;
+}
+
+.gw-warn {
+  margin: 0;
+  padding: var(--sp-2) var(--sp-3);
+  border-inline-start: 2px solid var(--warn);
+  border-radius: var(--r-2);
+  background: var(--warn-soft);
+  font-size: var(--fs-xs);
+  color: var(--fg-2);
+  line-height: 1.5;
+}
+
+/* 表格上方的一行作用域说明 */
+.gw-hintbar {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+  padding: var(--sp-3) var(--sp-4);
+  border-bottom: 1px solid var(--line);
+  background: var(--surface-2);
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+}
+
+.gw-hintbar-badge {
+  flex: 0 0 auto;
+}
+
+/* 拦截明细里的长文本：单行截断，完整内容走 title */
+.gw-detail-clip {
+  display: inline-block;
+  max-inline-size: 24ch;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  vertical-align: bottom;
+}
+
+/* 管控操作列固定在右侧。
+   窄窗口下工作台右栏只有约 390px，这类表必然横向滚动 —— 但「封禁 / 解封」是
+   本页的主操作，不该被滚出视野。sticky 列必须自带不透明底，否则右侧其它单元格
+   会从它下面透出来；悬停色单独补一次，不然行悬停在这一格失效。 */
+.gw-sticky-actions .dt th:last-child,
+.gw-sticky-actions .dt td:last-child {
+  position: sticky;
+  inset-inline-end: 0;
+  background: var(--surface-1);
+  border-inline-start: 1px solid var(--line);
+}
+
+.gw-sticky-actions .dt thead th:last-child {
+  background: var(--surface-2);
+  z-index: 3;
+}
+
+.gw-sticky-actions .dt tbody tr:hover td:last-child {
+  background: var(--surface-3);
+}
+
+.gw-sticky-actions .dt tbody tr[data-selected="true"] td:last-child {
+  background: var(--brand-soft);
+}
+
+/* ---- 接入指引 ---- */
+
+.gw-guide {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  padding: var(--panel-pad);
+}
+
+.gw-guide-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  padding: var(--sp-4);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--surface-1);
+}
+
+.gw-guide-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.gw-guide-row {
+  display: flex;
+  align-items: baseline;
+  gap: var(--sp-3);
+  font-size: var(--fs-xs);
+  min-width: 0;
+}
+
+.gw-guide-code {
+  margin: 0;
+  padding: var(--sp-3) var(--sp-4);
+  border-radius: var(--r-2);
+  background: var(--surface-inset);
+  border: 1px solid var(--line);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--fg-2);
+  white-space: pre-wrap;
+  word-break: break-all;
+  overflow-x: auto;
+}
+

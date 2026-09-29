@@ -1,0 +1,13 @@
+{
+  "kind": "vector_sanitize",
+  "summaryText": "长期记忆里已经写了显卡是 RTX 5070 Laptop 8GB 的完整说明。",
+  "maxHits": 3,
+  "mustNotContain": ["RTX 5070 Laptop 8GB 的完整说明"],
+  "hits": [
+    { "name": "dup", "content": "显卡是 RTX 5070 Laptop 8GB 的完整说明。" },
+    { "name": "keep", "content": "电源建议 180W 以上。" },
+    { "name": "keep2", "content": "散热风扇转速可调。" },
+    { "name": "keep3", "content": "驱动需 CUDA 13。" }
+  ],
+  "expectMaxHits": 3
+}

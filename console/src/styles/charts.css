@@ -1,0 +1,305 @@
+/*
+ * 图表样式。
+ * 全部为手写 SVG：不引入图表库,就没有「图表库默认长相」这件事。
+ */
+
+/* --------------------------------------------------------------------------
+ * 迷你走势
+ * ----------------------------------------------------------------------- */
+
+.spark {
+  display: block;
+  overflow: visible;
+}
+
+.spark-base {
+  stroke: var(--line-strong);
+  stroke-width: 1;
+}
+
+.spark-line {
+  fill: none;
+  stroke: var(--tone, var(--brand));
+  stroke-width: 1.4;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+/* --------------------------------------------------------------------------
+ * 面积图
+ * ----------------------------------------------------------------------- */
+
+.chart {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  min-width: 0;
+}
+
+.chart-plot {
+  position: relative;
+  display: flex;
+  min-width: 0;
+}
+
+.chart-axis {
+  position: relative;
+  flex: 0 0 52px;
+  inline-size: 52px;
+  pointer-events: none;
+}
+
+.chart-stage {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  border-radius: var(--r-2);
+}
+
+.chart-stage:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.chart-svg {
+  display: block;
+  inline-size: 100%;
+}
+
+.chart-grid {
+  stroke: var(--line);
+  stroke-width: 1;
+  vector-effect: non-scaling-stroke;
+}
+
+/* 曲线与游标跟随 tone（与 Sparkline / Ring 一致）。
+   此前写死 --brand，于是 AreaChart 的 tone 入参形同虚设。 */
+.chart-line {
+  fill: none;
+  stroke: var(--tone, var(--brand));
+  stroke-width: 1.6;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+}
+
+/* 面积填充：颜色由 <linearGradient> 的两个 stop 提供。
+   注意**不要**在这里写 `fill: url(#…)` —— CSS 声明会压过 SVG 的表现属性，
+   曾经这里指向一个不存在的固定 id，于是面积永远不渲染（只剩折线）。 */
+.chart-area-stop-a {
+  stop-color: var(--tone, var(--brand));
+  stop-opacity: 0.3;
+}
+
+.chart-area-stop-b {
+  stop-color: var(--tone, var(--brand));
+  stop-opacity: 0;
+}
+
+.chart-cursor {
+  stroke: var(--tone, var(--brand));
+  stroke-width: 1;
+  stroke-dasharray: 3 3;
+  vector-effect: non-scaling-stroke;
+}
+
+.chart-dot {
+  position: absolute;
+  inline-size: 8px;
+  block-size: 8px;
+  border-radius: var(--r-full);
+  background: var(--tone, var(--brand));
+  border: 1.5px solid var(--surface-1);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 4;
+  box-shadow: 0 0 0 1px var(--tone, var(--brand));
+}
+
+/* 轴标在 HTML 里,不放进 SVG —— 免得被 preserveAspectRatio 拉伸变形 */
+.chart-axis span {
+  position: absolute;
+  inset-inline-end: var(--sp-2);
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-3);
+}
+
+.chart-tip {
+  position: absolute;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  padding: var(--sp-2) var(--sp-4);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--surface-1);
+  box-shadow: var(--shadow-2);
+  font-size: var(--fs-micro);
+  white-space: nowrap;
+  pointer-events: none;
+  transform: translate(-50%, calc(-100% - 10px));
+}
+
+.chart-tip b {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-size: var(--fs-sm);
+  color: var(--fg);
+}
+
+.chart-tip .k {
+  color: var(--fg-3);
+}
+
+.chart-foot {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  font-size: var(--fs-micro);
+  color: var(--fg-3);
+}
+
+.chart-foot b {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-2);
+  font-weight: 500;
+}
+
+/* --------------------------------------------------------------------------
+ * 装配阶段导轨
+ * ----------------------------------------------------------------------- */
+
+/* 装配阶段导轨。
+   用 flex-wrap 而不是 grid auto-fit：
+   auto-fit 会在临界宽度排出「6+1」这种失衡行，且最后一行凑不满时**右侧空出一条轨道**。
+   flex 的 `flex: 1 1 <basis>` 让最后一行自动拉伸铺满，任何宽度下都不会留空轨。 */
+.stage-rail {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1px;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  overflow: hidden;
+}
+
+.stage-cell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  flex: 1 1 120px;
+  min-width: 0;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--surface-1);
+}
+
+.stage-cell[data-state="running"] {
+  background: var(--brand-soft);
+}
+
+.stage-cell[data-state="done"] {
+  background: var(--surface-1);
+}
+
+.stage-cell[data-state="idle"] {
+  opacity: 0.85;
+}
+
+.stage-cell-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  min-width: 0;
+}
+
+.stage-cell-name {
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.stage-cell[data-state="running"] .stage-cell-name {
+  color: var(--brand);
+}
+
+.stage-cell[data-state="done"] .stage-cell-name {
+  color: var(--fg);
+}
+
+.stage-cell[data-state="idle"] .stage-cell-name {
+  color: var(--fg-3);
+  font-weight: 500;
+}
+
+.stage-cell-ms {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-2);
+  white-space: nowrap;
+}
+
+.stage-cell[data-state="idle"] .stage-cell-ms {
+  color: var(--fg-3);
+}
+
+.stage-cell-track {
+  position: relative;
+  overflow: hidden;
+  block-size: 4px;
+  border-radius: var(--r-pill);
+  background: var(--surface-3);
+}
+
+.stage-cell-fill {
+  block-size: 100%;
+  inline-size: 100%;
+  border-radius: inherit;
+  background: var(--stage-color, var(--brand));
+  /* 走合成层：原先过渡 inline-size 会触发 layout/paint */
+  transform: scaleX(var(--fill, 0));
+  transform-origin: left center;
+  transition: transform var(--dur-3) var(--ease-out);
+}
+
+/* 运行中：一道掠光。reduced-motion 下必须真的停住 */
+.stage-cell[data-state="running"] .stage-cell-fill {
+  position: relative;
+  overflow: hidden;
+}
+
+.stage-cell[data-state="running"] .stage-cell-fill::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inline-size: 42%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.65), transparent);
+  animation: stage-sweep 1.1s linear infinite;
+}
+
+@keyframes stage-sweep {
+  from {
+    transform: translateX(-110%);
+  }
+  to {
+    transform: translateX(240%);
+  }
+}
+
+.stage-cell[data-state="done"] .stage-cell-fill {
+  background: var(--stage-color, var(--brand));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .stage-cell[data-state="running"] .stage-cell-fill::after {
+    animation: none !important;
+  }
+}
+

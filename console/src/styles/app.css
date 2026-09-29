@@ -1,0 +1,539 @@
+/*
+ * 外壳与页面框架。
+ *
+ * 骨架：左「导航栏」(带文字标签，可折叠 64px) + 右「工作区」(顶栏 + 内容) + 底部状态栏。
+ *
+ * 编辑风的关键决定：**导航栏 / 顶栏 / 状态栏共用画布色，内容以白面浮在其上**。
+ * 三块外框自成一套"机壳"，与内容面拉开一层明度差 —— 而不是把每块都刷成灰条。
+ * 用户真实窗口是 1080×634，纵向很紧，所以顶栏压在 60px、状态栏 30px。
+ */
+
+.app {
+  display: grid;
+  grid-template-columns: var(--rail-w) minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) var(--status-h);
+  block-size: 100dvh;
+  inline-size: 100%;
+  background: var(--bg);
+}
+
+.app[data-rail="collapsed"] {
+  grid-template-columns: var(--rail-w-min) minmax(0, 1fr);
+}
+
+/* ===========================================================================
+ * 导航栏
+ * ======================================================================== */
+
+.rail {
+  grid-column: 1;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--bg);
+  border-inline-end: 1px solid var(--line);
+}
+
+.rail-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  flex: 0 0 auto;
+  min-height: var(--header-h);
+  padding: 0 var(--sp-5);
+}
+
+/* 品牌标记：墨底白标。编辑风的"重"来自墨色，不来自渐变或发光。 */
+.rail-mark {
+  inline-size: 28px;
+  block-size: 28px;
+  flex: 0 0 auto;
+  display: grid;
+  place-items: center;
+  border-radius: var(--r-2);
+  background: var(--ink);
+  color: var(--ink-fg);
+}
+
+.rail-mark svg {
+  inline-size: 16px;
+  block-size: 16px;
+}
+
+.rail-wordmark {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.rail-wordmark strong {
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+  line-height: 1.25;
+}
+
+.rail-wordmark span {
+  font-size: var(--fs-micro);
+  color: var(--fg-3);
+  letter-spacing: 0.04em;
+}
+
+.rail-nav {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  padding: var(--sp-4) var(--sp-4) var(--sp-5);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+}
+
+.rail-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-width: 0;
+}
+
+.rail-group-label {
+  padding: var(--sp-2) var(--sp-4);
+}
+
+.rail-item {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-4);
+  min-height: 36px;
+  padding: 0 var(--sp-4);
+  border: 1px solid transparent;
+  border-radius: var(--r-2);
+  color: var(--fg-2);
+  font-size: var(--fs-sm);
+  transition:
+    background var(--dur-1) var(--ease),
+    border-color var(--dur-1) var(--ease),
+    color var(--dur-1) var(--ease);
+}
+
+.rail-item:hover {
+  background: var(--surface-3);
+  color: var(--fg);
+}
+
+/* 当前页：白面浮起 + 靛色图标。白面本身就是位置信号，不靠色块。 */
+.rail-item[aria-current="page"] {
+  background: var(--surface-1);
+  border-color: var(--line);
+  color: var(--fg);
+  font-weight: 600;
+  box-shadow: var(--shadow-1);
+}
+
+.rail-item[aria-current="page"] svg {
+  color: var(--brand);
+}
+
+.rail-item svg {
+  inline-size: 16px;
+  block-size: 16px;
+  flex: 0 0 auto;
+  stroke-width: 1.7;
+  color: var(--fg-3);
+  transition: color var(--dur-1) var(--ease);
+}
+
+.rail-item:hover svg {
+  color: var(--fg-2);
+}
+
+.rail-item-label {
+  flex: 1;
+  min-width: 0;
+}
+
+.rail-item-count {
+  flex: 0 0 auto;
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-3);
+}
+
+.rail-item[aria-current="page"] .rail-item-count {
+  color: var(--brand);
+}
+
+.rail-foot {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  padding: var(--sp-4) var(--sp-5);
+  border-top: 1px solid var(--line);
+}
+
+/* 折叠态：只剩图标，名称靠 CSS 隐藏，提示由 Tooltip 提供 */
+.app[data-rail="collapsed"] .rail-wordmark,
+.app[data-rail="collapsed"] .rail-group-label,
+.app[data-rail="collapsed"] .rail-item-label,
+.app[data-rail="collapsed"] .rail-item-count {
+  display: none;
+}
+
+.app[data-rail="collapsed"] .rail-brand,
+.app[data-rail="collapsed"] .rail-foot {
+  justify-content: center;
+  padding-inline: 0;
+}
+
+.app[data-rail="collapsed"] .rail-nav {
+  padding-inline: var(--sp-3);
+  align-items: center;
+}
+
+.app[data-rail="collapsed"] .rail-group {
+  align-items: center;
+}
+
+.app[data-rail="collapsed"] .rail-item {
+  justify-content: center;
+  inline-size: 40px;
+  min-height: 40px;
+  padding: 0;
+}
+
+/* ===========================================================================
+ * 工作区：顶栏 + 内容
+ * ======================================================================== */
+
+.stage {
+  grid-column: 2;
+  grid-row: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.header {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--sp-4);
+  min-height: var(--header-h);
+  padding: var(--sp-3) var(--sp-7);
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+
+.header-title {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1px;
+  min-width: 0;
+  flex: 1;
+}
+
+.header-title h1 {
+  font-size: 19px;
+  font-weight: 600;
+  letter-spacing: -0.024em;
+  line-height: 1.2;
+}
+
+.header-title .desc {
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+  max-inline-size: 68ch;
+}
+
+.header-tools {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex: 0 0 auto;
+}
+
+/* 顶栏只放全局操作；连接状态一律在底部状态栏报一次 */
+.main {
+  flex: 1;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--bg);
+}
+
+/* ===========================================================================
+ * 状态栏
+ * ======================================================================== */
+
+.statusbar {
+  grid-column: 1 / -1;
+  grid-row: 2;
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-5);
+  padding: 0 var(--sp-7);
+  background: var(--bg);
+  border-top: 1px solid var(--line);
+  font-size: var(--fs-micro);
+  color: var(--fg-3);
+  white-space: nowrap;
+  /* 安全阀：极窄屏下宁可自身横滚，也不让内容溢出文档 */
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+
+.statusbar::-webkit-scrollbar {
+  display: none;
+}
+
+.statusbar > .sb-live {
+  position: absolute;
+  inset-block-start: -1px;
+  inset-inline: 0;
+  block-size: 1px;
+}
+
+.sb-item {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex: 0 0 auto;
+}
+
+.sb-item b {
+  font-family: var(--font-mono);
+  font-weight: 500;
+  font-variant-numeric: tabular-nums;
+  color: var(--fg-2);
+}
+
+.sb-item[data-tone="bad"] b {
+  color: var(--bad);
+}
+
+.sb-item[data-tone="warn"] b {
+  color: var(--warn);
+}
+
+.sb-sep {
+  color: var(--line-strong);
+  flex: 0 0 auto;
+}
+
+.sb-spacer {
+  flex: 1;
+  min-inline-size: var(--sp-5);
+}
+
+/* ===========================================================================
+ * 页面框架
+ * ======================================================================== */
+
+.page {
+  block-size: 100%;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.page-enter {
+  animation: page-fade var(--dur-2) var(--ease-out);
+}
+
+@keyframes page-fade {
+  from {
+    opacity: 0.85;
+    transform: translateY(2px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* 常规页：整体滚动，面板之间留出节奏 */
+.page-scroll {
+  overflow: auto;
+  padding: var(--panel-pad);
+  gap: var(--stack-gap);
+}
+
+.page-scroll > * {
+  flex-shrink: 0;
+}
+
+/* 工作台式页：内容自己铺满，不留外框留白 */
+.page-flush {
+  padding: 0;
+  gap: 0;
+}
+
+/* 分栏：1px 缝隙由背景色充当分割线，面板自身不带边框 */
+.split {
+  flex: 1;
+  min-height: 0;
+  min-width: 0;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 1px;
+  background: var(--line);
+  overflow: hidden;
+}
+
+.split-pane {
+  min-width: 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  background: var(--surface-1);
+  overflow: hidden;
+}
+
+.pane-head {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  min-height: 42px;
+  padding: var(--sp-4) var(--panel-pad);
+  border-bottom: 1px solid var(--line);
+  background: transparent;
+  font-size: var(--fs-h3);
+  font-weight: 600;
+}
+
+.pane-body {
+  flex: 1;
+  min-height: 0;
+  overflow: auto;
+}
+
+@media (min-width: 960px) {
+  .split--ms {
+    grid-template-columns: minmax(0, 1.6fr) minmax(300px, 0.9fr);
+  }
+
+  .split--half {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+}
+
+/* 居中占位页（未连接 / 载入中） */
+.blocked {
+  block-size: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: var(--sp-4);
+  padding: var(--sp-8);
+  text-align: center;
+}
+
+.blocked h2 {
+  font-size: var(--fs-title);
+  font-weight: 600;
+  letter-spacing: -0.015em;
+}
+
+.blocked p {
+  font-size: var(--fs-sm);
+  color: var(--fg-3);
+  max-inline-size: 52ch;
+}
+
+/* ===========================================================================
+ * 窄屏：导航栏压成顶部图标条，避免与内容争宽度
+ * ======================================================================== */
+
+@media (max-width: 900px) {
+  .app,
+  .app[data-rail="collapsed"] {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto minmax(0, 1fr) var(--status-h);
+  }
+
+  .rail {
+    grid-column: 1;
+    grid-row: 1;
+    flex-direction: row;
+    align-items: center;
+    gap: var(--sp-3);
+    padding: var(--sp-2) var(--sp-4);
+    border-inline-end: none;
+    border-block-end: 1px solid var(--line);
+  }
+
+  .rail-brand {
+    min-height: 0;
+    padding: 0;
+  }
+
+  .rail-wordmark,
+  .rail-group-label,
+  .rail-item-label,
+  .rail-item-count,
+  .rail-collapse {
+    display: none;
+  }
+
+  .rail-nav {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--sp-1);
+    padding: 0;
+    overflow: visible;
+    flex: 1;
+  }
+
+  .rail-group {
+    flex-direction: row;
+    gap: var(--sp-1);
+  }
+
+  .rail-item,
+  .app[data-rail="collapsed"] .rail-item {
+    justify-content: center;
+    inline-size: 40px;
+    block-size: 40px;
+    min-height: 0;
+    padding: 0;
+  }
+
+  .rail-foot {
+    padding: 0;
+    border-top: none;
+  }
+
+  .stage {
+    grid-column: 1;
+    grid-row: 2;
+  }
+
+  .statusbar {
+    grid-column: 1;
+    grid-row: 3;
+  }
+
+  .header {
+    padding-inline: var(--panel-pad);
+  }
+
+  .header-title .desc,
+  .sb-opt {
+    display: none;
+  }
+}

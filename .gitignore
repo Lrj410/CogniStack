@@ -1,0 +1,26 @@
+# 依赖
+node_modules/
+console/node_modules/
+
+# 构建产物（由 npm run build / console:build 生成，不提交）
+dist/
+dist-test/
+console/dist/
+
+# 生成物 / 运行时数据
+repro_outputs/
+_sessions/
+*.tgz
+*.log
+
+# 环境变量与密钥
+.env
+.env.*
+!.env.example
+
+# 编辑器 / 操作系统
+.idea/
+.vscode/*
+!.vscode/extensions.json
+.DS_Store
+Thumbs.db

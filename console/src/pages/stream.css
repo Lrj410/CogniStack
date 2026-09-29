@@ -1,0 +1,196 @@
+/* 回合页专属布局（前缀 st-） */
+
+.st-search {
+  inline-size: clamp(180px, 24vw, 320px);
+}
+
+.st-select {
+  inline-size: auto;
+  min-inline-size: 120px;
+}
+
+/* 工具条右侧的列表状态：文字说明 + 一个在线/暂停信号点 */
+.st-state {
+  flex: 0 1 auto;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-3);
+  min-width: 0;
+  max-inline-size: 44ch;
+  font-size: var(--fs-xs);
+  color: var(--fg-2);
+}
+
+/* 列表行可点击 */
+.st-row {
+  cursor: pointer;
+}
+
+/* 详情面板：竖向分节,各节之间留出节奏 */
+.st-detail {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-6);
+  min-width: 0;
+  padding: var(--panel-pad);
+}
+
+.st-detail-head {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  min-width: 0;
+}
+
+.st-detail-title {
+  font-size: var(--fs-title);
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.st-detail-sub {
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+}
+
+/* 键值栅格 */
+.st-kv {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+  gap: var(--sp-4);
+}
+
+.st-kv-cell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  min-width: 0;
+  padding: var(--sp-4);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--surface-2);
+}
+
+.st-kv-label {
+  color: var(--fg-3);
+}
+
+.st-kv-value {
+  font-size: var(--fs-body);
+  color: var(--fg);
+}
+
+/* 分节 */
+.st-sec {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+  min-width: 0;
+}
+
+.st-sec-title {
+  color: var(--fg-3);
+}
+
+/* 阶段耗时：标签 · 比例条 · 数值 */
+.st-stages {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+.st-stage {
+  display: grid;
+  grid-template-columns: 72px minmax(0, 1fr) 64px;
+  align-items: center;
+  gap: var(--sp-4);
+  min-width: 0;
+}
+
+.st-stage-label {
+  font-size: var(--fs-xs);
+  color: var(--fg-2);
+}
+
+.st-stage-track {
+  display: block;
+  min-width: 0;
+  block-size: 6px;
+  border-radius: var(--r-pill);
+  background: var(--surface-3);
+  overflow: hidden;
+}
+
+.st-stage-fill {
+  display: block;
+  block-size: 100%;
+  inline-size: 100%;
+  border-radius: inherit;
+  /* 合成层动效：阶段导轨统一用 --fill 约定驱动 scaleX */
+  transform: scaleX(var(--fill, 0));
+  transform-origin: left center;
+  transition: transform var(--dur-3) var(--ease-out);
+}
+
+.st-stage-ms {
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+  text-align: center;
+}
+
+/* 告警 */
+.st-warns {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.st-warn {
+  font-size: var(--fs-xs);
+  color: var(--warn);
+}
+
+/* 步骤 */
+.st-steps {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.st-step {
+  font-size: var(--fs-xs);
+  color: var(--fg-2);
+}
+
+/* 上下文键值对 */
+.st-meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  min-width: 0;
+}
+
+.st-meta-row {
+  display: grid;
+  grid-template-columns: minmax(0, 140px) minmax(0, 1fr);
+  gap: var(--sp-4);
+  min-width: 0;
+}
+
+.st-meta-key {
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+}
+
+.st-meta-val {
+  font-size: var(--fs-xs);
+  color: var(--fg-2);
+}

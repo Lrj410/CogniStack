@@ -1,0 +1,104 @@
+{
+  "name": "cognistack-engine",
+  "version": "1.3.0",
+  "description": "CogniStack Engine — context × memory fusion for any host. Zero runtime deps: prompt assemble / budget / soft-trim / long-term memory. Optional lore (knowledge) ports; legacy world-book aliases kept.",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "require": "./dist/index.js",
+      "default": "./dist/index.js"
+    },
+    "./ports": {
+      "types": "./dist/ports.d.ts",
+      "require": "./dist/ports.js",
+      "default": "./dist/ports.js"
+    },
+    "./types": {
+      "types": "./dist/types.d.ts",
+      "require": "./dist/types.js",
+      "default": "./dist/types.js"
+    },
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "dist/**/*.js",
+    "dist/**/*.d.ts",
+    "dist/**/*.d.ts.map",
+    "dist/package.json",
+    "README.md",
+    "USAGE.md",
+    "INTEGRATION.md",
+    "DEVELOPMENT.md",
+    "CHANGELOG.md",
+    "LICENSE",
+    "docs/decisions/**/*",
+    "docs/eval.md",
+    "examples/**/*"
+  ],
+  "sideEffects": false,
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "start": "node scripts/start-all.cjs",
+    "start:prod": "npm run build && npm run console:build && node scripts/start-server.cjs",
+    "start:cluster": "npm run build && npm run console:build && node scripts/start-cluster.cjs",
+    "typecheck": "tsc --noEmit",
+    "build": "tsc -p tsconfig.build.json && node scripts/postbuild.cjs",
+    "build:test": "tsc -p tsconfig.test.json && node scripts/postbuild.cjs dist-test",
+    "prepack": "npm run build",
+    "prepublishOnly": "npm run typecheck && npm test && npm run build && npm run api:surface:check && npm run doc:numbers:check && npm run bundle:audit",
+    "test": "npm run build:test && node --test dist-test/test/*.test.js test/*.test.cjs",
+    "test:fast": "node --test dist-test/test/*.test.js test/*.test.cjs",
+    "test:coverage": "npm run build:test && node --experimental-test-coverage --test dist-test/test/*.test.js test/*.test.cjs",
+    "probe": "npm run build && node scripts/probe.cjs",
+    "bench": "npm run build && node scripts/bench.prepare.cjs",
+    "sim": "npm run build && node scripts/sim.cjs",
+    "eval": "npm run build && node scripts/eval/run.cjs",
+    "eval:turn": "node scripts/turn-to-eval.cjs",
+    "api:surface": "node scripts/api-surface.cjs",
+    "api:surface:check": "node scripts/api-surface.cjs --check",
+    "api:surface:write": "node scripts/api-surface.cjs --write",
+    "bundle:audit": "node scripts/bundle-audit.cjs",
+    "doc:numbers": "node scripts/doc-numbers.cjs",
+    "doc:numbers:check": "node scripts/doc-numbers.cjs --check",
+    "verify:turn-log": "node scripts/verify-turn-log.cjs",
+    "verify:viz-http": "node scripts/verify-viz-http.cjs",
+    "verify:viz-auth": "node tools/viz-auth.selftest.cjs",
+    "verify:viz-zones": "node tools/viz-zones.selftest.cjs",
+    "verify:viz-zones:e2e": "node scripts/verify-viz-zones.cjs",
+    "example": "npm run build && node examples/minimal.cjs",
+    "example:summarize": "npm run build && node examples/summarize-loop.cjs",
+    "example:jsonl": "npm run build && node examples/jsonl-session-host.cjs",
+    "example:tenant": "npm run build && node examples/multi-tenant-host.cjs",
+    "example:langchain": "npm run build && node examples/langchain-adapter.cjs",
+    "openai:compat": "npm run build && node tools/openai-compat.cjs",
+    "anthropic:compat": "npm run build && node tools/anthropic-compat.cjs",
+    "viz": "npm run build && node tools/viz-server.cjs",
+    "viz:client": "node tools/example-client.cjs",
+    "console:dev": "npm --prefix console run dev",
+    "console:build": "npm --prefix console run build",
+    "console:install": "npm --prefix console install",
+    "api:example": "node examples/http-call.cjs",
+    "pack:check": "npm pack --dry-run"
+  },
+  "keywords": [
+    "context-engine",
+    "memory-engine",
+    "prompt",
+    "token-budget",
+    "soft-trim",
+    "cognistack"
+  ],
+  "author": "Lrj410",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^24.13.4",
+    "concurrently": "^9.2.1",
+    "typescript": "^5.9.2"
+  }
+}

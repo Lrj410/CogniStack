@@ -1,0 +1,202 @@
+/*
+ * CogniStack 控制台 —— 设计令牌
+ * ---------------------------------------------------------------------------
+ * 视觉方向「现代极简编辑风 (Editorial Minimal)」：
+ *   - 纸面质感：暖中性画布 + 纯白内容面，层次靠留白与发丝线，不靠重投影
+ *   - 一套中性墨色梯度承担全部层级；唯一高饱和强调色（冷蓝）只标记
+ *     「当前所在 / 可交互 / 正在接收」
+ *   - 绿 / 琥珀 / 红**只表状态**，绝不兼职强调色 —— 否则「健康」与「强调」会打架
+ *   - 数字一律等宽 + tabular，便于纵向比对
+ *
+ * 对比度硬约束：qa-layout 会逐叶节点实测，**所有前景色按 4.5:1 反推**，
+ * 不是"看着顺眼"挑的。尤其 --fg-3：它承载 10–11px 微标签，属小字号，
+ * 必须按 4.5:1 而不是 3:1 选色 —— 这是上一版 3465 条 FAIL 的根因。
+ */
+
+:root {
+  /* ---- 画布与面（亮色为默认档） ---- */
+  --bg: #f1f1ef; /* 画布：暖中性纸面 */
+  --surface-1: #ffffff; /* 内容面：面板 / 卡片 */
+  --surface-2: #fafaf9; /* 抬升：面板头 / 表头 / 浅底小卡 */
+  --surface-3: #ebebe8; /* 悬停 / 选中底（必须比画布明显更深，否则导轨悬停看不见） */
+  --surface-inset: #f6f6f4; /* 凹槽：代码块 / 日志井 */
+
+  /* ---- 结构线（发丝级，永远中性） ---- */
+  --line: rgba(19, 21, 26, 0.09);
+  --line-strong: rgba(19, 21, 26, 0.16);
+
+  /* ---- 文本梯度（每一档都实测过对比度） ---- */
+  --fg: #16181d; /* 15.9:1 on white */
+  --fg-2: #4b5059; /*  8.8:1 on white */
+  --fg-3: #65686f; /*  5.6:1 on white / 5.1:1 on 画布 / 4.9:1 on --surface-3 —— 微标签也达标 */
+
+  /* ---- 主操作：墨色实心（编辑风的"重"来自墨，而不是彩色） ---- */
+  --ink: #16181d;
+  --ink-hover: #2b2f38;
+  --ink-fg: #ffffff;
+
+  /* ---- 唯一强调色：冷蓝（表示当前 / 可交互 / 正在接收） ---- */
+  --brand: #2563eb;
+  --brand-fill: #2563eb;
+  --on-brand: #ffffff;
+  --brand-soft: rgba(37, 99, 235, 0.09);
+  --brand-line: rgba(37, 99, 235, 0.3);
+
+  /* ---- 语义状态（只表状态；每一档都按「压在 10% 自身上」实测 ≥4.5:1） ---- */
+  --ok: #0f6b45;
+  --ok-soft: rgba(15, 107, 69, 0.1);
+  --warn: #8a5a00;
+  --warn-soft: rgba(138, 90, 0, 0.1);
+  --bad: #b02a1f;
+  --bad-soft: rgba(176, 42, 31, 0.1);
+  --info: #2f5fbd;
+  --info-soft: rgba(47, 95, 189, 0.1);
+  --neutral: #5f646d;
+  --neutral-soft: rgba(95, 100, 109, 0.1);
+
+  /* ---- 装配阶段：同一色相的明度梯级（7 阶段 7 色相 = 彩虹 = 模板感最强来源） ---- */
+  --stage-1: #d6e3fd;
+  --stage-2: #b3cbfa;
+  --stage-3: #8bb1f5;
+  --stage-4: #5f92ef;
+  --stage-5: #2563eb;
+  --stage-6: #1d4ed8;
+  --stage-7: #8a5a00; /* 裁剪段转琥珀 */
+
+  /* ---- 焦点环（必须真能看见，不是只写在 CSS 里） ---- */
+  --ring: #2563eb;
+  --ring-soft: rgba(37, 99, 235, 0.36);
+
+  /* ---- 字体 ---- */
+  --font-ui: "Inter", "Segoe UI Variable Text", "Segoe UI", "PingFang SC", "HarmonyOS Sans SC",
+    "Microsoft YaHei UI", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* ---- 字号（编辑风的层级靠"跨度"，不靠加粗堆叠） ---- */
+  --fs-title: 16px;
+  --fs-h3: 13.5px;
+  --fs-body: 13px;
+  --fs-sm: 12.5px;
+  --fs-xs: 12px;
+  --fs-micro: 11px;
+
+  /* ---- 行高 / 字距 ---- */
+  --lh-body: 1.55;
+  --tracking-micro: 0.07em;
+
+  /* ---- 间距（4px 节奏，编辑风刻意留白更宽） ---- */
+  --sp-1: 2px;
+  --sp-2: 4px;
+  --sp-3: 6px;
+  --sp-4: 8px;
+  --sp-5: 12px;
+  --sp-6: 16px;
+  --sp-7: 20px;
+  --sp-8: 24px;
+  --sp-9: 32px;
+
+  /* ---- 圆角（小圆角：现代编辑风不靠大圆角制造亲切感） ---- */
+  --r-1: 4px;
+  --r-2: 6px;
+  --r-3: 10px;
+  --r-4: 14px;
+  --r-pill: 999px;
+
+  /* ---- 阴影（克制到几乎看不见；层次交给留白与发丝线） ---- */
+  --shadow-1: 0 1px 2px rgba(19, 21, 26, 0.06);
+  --shadow-2: 0 6px 20px -8px rgba(19, 21, 26, 0.16);
+  --shadow-3: 0 20px 44px -16px rgba(19, 21, 26, 0.24);
+
+  /* ---- 动效（短、克制：工具一天切页几十次，编排越长越像演示） ---- */
+  --dur-1: 110ms;
+  --dur-2: 170ms;
+  --dur-3: 260ms;
+  --ease: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* ---- 外壳尺寸 ---- */
+  --rail-w: 248px;
+  --rail-w-min: 64px;
+  --header-h: 60px;
+  --status-h: 30px;
+
+  /* ---- 密度相关（compact 档在这些地方收紧，不碰字号） ---- */
+  --panel-pad: 18px;
+  --stack-gap: 14px;
+  --row-pad-y: 8px;
+  --row-h: 36px;
+  --ctl-h: 32px;
+
+  color-scheme: light;
+}
+
+/* ---------------------------------------------------------------------------
+ * 深色主题：同一套语义换明度方向。
+ * 画布刻意不用纯黑 —— 纯黑 + 纯白文字是最"廉价"的一组对比；
+ * 用 #0c0d10 / #141519 的墨阶，长时间盯屏不刺眼。
+ * ------------------------------------------------------------------------- */
+:root[data-theme="dark"] {
+  --bg: #0c0d10;
+  --surface-1: #141519;
+  --surface-2: #191a1f;
+  --surface-3: #23242b;
+  --surface-inset: #0a0b0e;
+
+  --line: rgba(236, 238, 244, 0.08);
+  --line-strong: rgba(236, 238, 244, 0.15);
+  --line-inset: rgba(0, 0, 0, 0.5);
+
+  --fg: #ecedf1;
+  --fg-2: #a8adb8;
+  --fg-3: #8b909a; /* 5.6:1 on --surface-1 */
+
+  --ink: #f0f1f4;
+  --ink-hover: #ffffff;
+  --ink-fg: #101114;
+
+  --brand: #6ea8fe;
+  --brand-fill: #2563eb;
+  --on-brand: #ffffff;
+  --brand-soft: rgba(110, 168, 254, 0.14);
+  --brand-line: rgba(110, 168, 254, 0.34);
+
+  --ok: #45c78c;
+  --ok-soft: rgba(69, 199, 140, 0.14);
+  --warn: #e0ab45;
+  --warn-soft: rgba(224, 171, 69, 0.14);
+  --bad: #f07a68;
+  --bad-soft: rgba(240, 122, 104, 0.14);
+  --info: #8aa4f0;
+  --info-soft: rgba(138, 164, 240, 0.14);
+  --neutral: #8b909a;
+  --neutral-soft: rgba(139, 144, 154, 0.14);
+
+  --stage-1: #17305c;
+  --stage-2: #1e4184;
+  --stage-3: #2554ad;
+  --stage-4: #2f6ce0;
+  --stage-5: #6ea8fe;
+  --stage-6: #a8c9ff;
+  --stage-7: #e0ab45;
+
+  --ring: #6ea8fe;
+  --ring-soft: rgba(110, 168, 254, 0.4);
+
+  --shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-2: 0 8px 24px -10px rgba(0, 0, 0, 0.6);
+  --shadow-3: 0 20px 48px -14px rgba(0, 0, 0, 0.72);
+
+  color-scheme: dark;
+}
+
+/* ---------------------------------------------------------------------------
+ * 密度：紧凑档只收紧内边距与行高。
+ * **不碰字号** —— 字号一动，上面整张对比度推导就要重算。
+ * ------------------------------------------------------------------------- */
+:root[data-density="compact"] {
+  --panel-pad: 13px;
+  --stack-gap: 10px;
+  --row-pad-y: 5px;
+  --row-h: 30px;
+  --ctl-h: 28px;
+}

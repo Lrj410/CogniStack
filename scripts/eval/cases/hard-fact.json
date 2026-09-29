@@ -1,0 +1,25 @@
+{
+  "kind": "hard_fact_retention",
+  "contextTokenLimit": 900,
+  "completionReserveTokens": 100,
+  "softTrimTokenCap": 700,
+  "summarizedThroughMessageId": "2",
+  "mustContain": ["禁忌词火"],
+  "summaryBlocks": [
+    {
+      "id": "b1",
+      "text": "【硬事实】禁忌词火\n【时间线】无\n【关系与称呼】无\n【未决】无\n【近期情节】缓冲情节一。缓冲情节二。缓冲情节三。缓冲情节四。缓冲情节五。缓冲情节六。缓冲情节七。缓冲情节八。缓冲情节九。缓冲情节十。缓冲情节十一。缓冲情节十二。",
+      "throughMessageId": "2",
+      "kind": "full",
+      "importance": 90
+    }
+  ],
+  "dialogue": [
+    { "id": "1", "role": "user", "content": "你好" },
+    { "id": "2", "role": "assistant", "content": "你好。" },
+    { "id": "3", "role": "user", "content": "还记得禁忌吗？" },
+    { "id": "4", "role": "assistant", "content": "记得。" },
+    { "id": "5", "role": "user", "content": "再说一遍系统规则要很长才能压预算。" },
+    { "id": "6", "role": "assistant", "content": "好的，我会保持简洁但上下文已经偏满。" }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "kind": "hard_fit",
+  "contextTokenLimit": 512,
+  "completionReserveTokens": 128,
+  "cardPad": 400,
+  "expectPressure": true,
+  "dialogue": [
+    { "id": "1", "role": "user", "content": "请详细说明显卡、驱动、散热与电源预算，并重复要点。" },
+    { "id": "2", "role": "assistant", "content": "好的，我会逐项说明。" },
+    { "id": "3", "role": "user", "content": "再补充显存带宽与 CUDA 版本兼容性。" },
+    { "id": "4", "role": "assistant", "content": "收到，继续补充。" }
+  ],
+  "loreEntries": [
+    {
+      "id": "l1",
+      "name": "显卡长文",
+      "keys": ["显卡"],
+      "content": "显卡规格说明。",
+      "enabled": true,
+      "constant": true,
+      "insertionOrder": 0
+    },
+    {
+      "id": "l2",
+      "name": "驱动长文",
+      "keys": ["驱动"],
+      "content": "驱动说明第二段。",
+      "enabled": true,
+      "constant": true,
+      "insertionOrder": 1
+    },
+    {
+      "id": "l3",
+      "name": "散热长文",
+      "keys": ["散热"],
+      "content": "散热说明第三段。",
+      "enabled": true,
+      "constant": true,
+      "insertionOrder": 2
+    }
+  ],
+  "vectorHits": [
+    { "name": "召回1", "content": "相关检索片段一重复填充内容以增加压力。" },
+    { "name": "召回2", "content": "相关检索片段二重复填充内容以增加压力。" }
+  ]
+}

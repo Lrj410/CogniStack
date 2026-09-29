@@ -1,0 +1,148 @@
+/* 调试页专属布局（前缀 pg-）。
+   取色一律走 tokens,不出现字面颜色；分隔线由 1px 缝隙 + 背景色充当,和 .split 同一套做法。 */
+
+.pg-heading {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+}
+
+.pg-title {
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  color: var(--fg);
+  line-height: 1.25;
+}
+
+.pg-sub {
+  font-size: var(--fs-micro);
+  letter-spacing: 0.06em;
+  color: var(--fg-3);
+}
+
+/* 解析失败的提示：贴在工具条下方,只占一条,不挤掉工作区 */
+.pg-note {
+  flex: 0 0 auto;
+  padding: var(--sp-4) var(--panel-pad);
+  border-bottom: 1px solid var(--line);
+  background: var(--surface-1);
+}
+
+/* ===========================================================================
+ * 分栏列
+ * ======================================================================== */
+
+/* 一列里再叠若干面板：用 1px 缝隙画出结构线 */
+.pg-col {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--line-strong);
+}
+
+/* 列内面板等分剩余高度 */
+.pg-col > * {
+  flex: 1 1 0;
+  min-height: 0;
+}
+
+/* 请求体固定一屏高,把剩余空间让给覆盖与结果 */
+.pg-col > .pg-req {
+  flex: 0 0 170px;
+}
+
+.pg-ov-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1px;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: var(--line-strong);
+}
+
+/* ===========================================================================
+ * 面板内容
+ * ======================================================================== */
+
+/* 让 textarea 铺满：容器改成不可滚动的 flex 列 */
+.pane-body.pg-flush-body {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* 响应井：容器不内缩,井自身撑满 */
+.pane-body.pg-well-body {
+  display: flex;
+  flex-direction: column;
+  padding: 0;
+  overflow: auto;
+}
+
+.pane-body.pg-pad-body {
+  padding: var(--panel-pad);
+  overflow: auto;
+}
+
+/* 编辑器去掉自带边框与圆角,直接嵌进面板 */
+textarea.pg-editor {
+  block-size: 100%;
+  min-block-size: 0;
+  border: 0;
+  border-radius: 0;
+  resize: none;
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+}
+
+.pg-well {
+  flex: 1;
+  margin: 0;
+  padding: var(--panel-pad);
+}
+
+.pg-wait {
+  font-size: var(--fs-sm);
+  color: var(--fg-3);
+}
+
+.pg-result-label {
+  color: var(--fg-2);
+}
+
+.pg-ms {
+  color: var(--fg-3);
+}
+
+/* 键值栅格：窄屏自动换列 */
+.pg-kv {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
+  gap: var(--sp-4);
+}
+
+.pg-kv-item {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  min-width: 0;
+  padding: var(--sp-4);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  background: var(--surface-2);
+}
+
+.pg-kv-k {
+  color: var(--fg-3);
+}
+
+.pg-kv-v {
+  font-size: var(--fs-sm);
+  color: var(--fg);
+}

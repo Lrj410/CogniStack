@@ -1,0 +1,138 @@
+/* 总览页专属布局（前缀 ov-） */
+
+.ov-focus {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.ov-focus-label {
+  margin-inline-end: var(--sp-2);
+}
+
+/* 六档读数：宽屏一行六个、中屏 3×2、窄屏 2×3。
+   用 `auto-fit` 会在临界宽度排出「5+1」这种一眼失衡的版式，所以断点写死。 */
+.ov-stats {
+  display: grid;
+  gap: var(--stack-gap);
+  min-width: 0;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+@media (min-width: 760px) {
+  .ov-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (min-width: 1240px) {
+  .ov-stats {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+}
+
+.ov-alerts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+}
+
+/* 图表与主机列表：宽屏左右分栏,窄屏自动上下堆叠 */
+.ov-split {
+  display: grid;
+  gap: var(--stack-gap);
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 1080px) {
+  .ov-split {
+    grid-template-columns: minmax(0, 1.7fr) minmax(300px, 1fr);
+  }
+}
+
+.ov-hosts {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.ov-host {
+  inline-size: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding: var(--sp-3) var(--sp-4);
+  border: 1px solid transparent;
+  border-radius: var(--r-2);
+  background: transparent;
+  text-align: start;
+  cursor: pointer;
+  transition:
+    background var(--dur-1) var(--ease),
+    border-color var(--dur-1) var(--ease);
+}
+
+.ov-host:hover {
+  border-color: var(--line);
+  background: var(--surface-3);
+}
+
+.ov-host[data-active="true"] {
+  border-color: var(--brand-line);
+  background: var(--brand-soft);
+}
+
+.ov-host-main {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.ov-host-name {
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.ov-host-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+}
+
+/* 装配面板顶部的实时横幅：结构化状态条 */
+.ov-banner {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding: var(--sp-2) var(--sp-3);
+  margin-block-end: var(--sp-3);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+}
+
+.ov-banner-text {
+  font-size: var(--fs-xs);
+  color: var(--fg-2);
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+}
+
+.ov-banner-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-3);
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  color: var(--fg-3);
+  white-space: nowrap;
+}

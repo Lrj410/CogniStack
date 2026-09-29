@@ -1,0 +1,173 @@
+/*
+ * 基础层：重置、排版基线、焦点、滚动条、通用工具类。
+ * 这里不出现任何组件样式 —— 组件样式在 ui.css / app.css / 各页面自己的 css 里。
+ */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-ui);
+  font-size: var(--fs-body);
+  line-height: var(--lh-body);
+  font-feature-settings: "cv05" 1, "cv11" 1, "ss01" 1;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+/* 滚动条：默认样式在深色下刺眼、在浅色下过重，统一换成发丝线 */
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--line-strong) transparent;
+}
+
+*::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+*::-webkit-scrollbar-thumb {
+  background: var(--line-strong);
+  border: 3px solid transparent;
+  background-clip: content-box;
+  border-radius: var(--r-pill);
+}
+
+*::-webkit-scrollbar-thumb:hover {
+  background: var(--fg-3);
+  background-clip: content-box;
+}
+
+*::-webkit-scrollbar-corner {
+  background: transparent;
+}
+
+h1,
+h2,
+h3,
+h4,
+p {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+/* 焦点环：任何可聚焦元素都必须看得见。绝不写 outline: none。 */
+:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+::selection {
+  background: var(--brand-soft);
+  color: var(--fg);
+}
+
+/* ---------------------------------------------------------------------------
+ * 工具类（只有这几个，不做通用原子类库）
+ * ------------------------------------------------------------------------- */
+
+/* 所有数值：等宽 + tabular，保证列与列之间能对齐比较 */
+.num {
+  font-family: var(--font-mono);
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum" 1, "zero" 1;
+  letter-spacing: -0.01em;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+/* 微标签：全大写 + 拉开字距，用于字段名而不是值 */
+.micro {
+  font-size: var(--fs-micro);
+  font-weight: 600;
+  letter-spacing: var(--tracking-micro);
+  text-transform: uppercase;
+  color: var(--fg-3);
+}
+
+/* 单行截断（带 title 时 qa-layout 视为「有意截断」而非缺陷） */
+.truncate {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+}
+
+/* ---------------------------------------------------------------------------
+ * 在线信号：一条掠光，表示"正在接收"。
+ * 动效必须能在 prefers-reduced-motion 下真正停住 —— qa-layout 会读计算样式断言，
+ * 只写在 CSS 里不算数。
+ * ------------------------------------------------------------------------- */
+.rail-dash {
+  position: relative;
+  overflow: hidden;
+  background: var(--brand-soft);
+}
+
+.rail-dash::after {
+  content: "";
+  position: absolute;
+  inset-block: 0;
+  inline-size: 34%;
+  background: linear-gradient(90deg, transparent, var(--brand), transparent);
+  animation: rail-sweep 2.4s var(--ease) infinite;
+}
+
+@keyframes rail-sweep {
+  from {
+    transform: translateX(-120%);
+  }
+  to {
+    transform: translateX(320%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .rail-dash::after {
+    animation: none !important;
+  }
+}

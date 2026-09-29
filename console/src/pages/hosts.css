@@ -1,0 +1,86 @@
+/* 主机页专属布局（前缀 ho-） */
+
+.ho-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-5);
+}
+
+.ho-card-head {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--sp-4);
+}
+
+.ho-card-id {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-width: 0;
+  flex: 1;
+}
+
+.ho-card-name {
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.ho-card-sub {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--fg-3);
+}
+
+/* 四个迷你指标：等分,数值走等宽便于纵向比对 */
+.ho-metrics {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--sp-4);
+}
+
+.ho-metric {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  min-width: 0;
+}
+
+.ho-metric-value {
+  font-size: var(--fs-body);
+  color: var(--fg);
+}
+
+.ho-metric-value[data-tone="bad"] {
+  color: var(--bad);
+}
+
+/* 页脚：与上方内容用一条发丝线分开 */
+.ho-card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-4);
+  padding-block-start: var(--sp-4);
+  border-top: 1px solid var(--line);
+}
+
+.ho-host-cell {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  min-width: 0;
+}
+
+.ho-host-name {
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--fg);
+}
+
+.ho-host-id {
+  font-family: var(--font-mono);
+  font-size: var(--fs-micro);
+  color: var(--fg-3);
+}

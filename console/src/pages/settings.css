@@ -1,0 +1,64 @@
+/* 设置页专属布局（前缀 se-）。
+   取色一律走 tokens，不出现字面颜色。 */
+
+/*
+ * 宽屏两栏：左列「偏好与鉴权」，右列「端点与读数」。
+ *
+ * 旧版是一个 820px 的**居中护栏**（`.se-narrow`）——用户窗口约 1700px 宽时，
+ * 两侧各空出约 300px，等于把近半屏扔掉。现在两栏吃满可用宽度；
+ * 左列给表单一个舒服的书写宽度（0.85fr），右列留给需要宽度的端点表（1.15fr）。
+ */
+.se-layout {
+  display: grid;
+  gap: var(--stack-gap);
+  min-width: 0;
+  grid-template-columns: minmax(0, 1fr);
+}
+
+@media (min-width: 1200px) {
+  .se-layout {
+    grid-template-columns: minmax(380px, 0.85fr) minmax(0, 1.15fr);
+    align-items: start;
+  }
+}
+
+.se-col {
+  display: flex;
+  flex-direction: column;
+  gap: var(--stack-gap);
+  min-width: 0;
+}
+
+/* 偏好行：左标签、右分段控件，窄屏自动换行 */
+.se-pref {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-5);
+  flex-wrap: wrap;
+  min-width: 0;
+}
+
+.se-pref-label {
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--fg);
+}
+
+/* 说明行：靠 --fg-3 降调，不用 opacity */
+.se-hint {
+  font-size: var(--fs-xs);
+  line-height: var(--lh-body);
+  color: var(--fg-3);
+}
+
+/* 端点 URL 列：自带横向滚动，长 URL 靠内部滚动查看，绝不撑破面板 */
+.se-url {
+  display: block;
+  max-inline-size: 100%;
+  overflow-x: auto;
+  white-space: nowrap;
+  padding-block: var(--sp-1);
+  scrollbar-width: thin;
+  color: var(--fg-2);
+}

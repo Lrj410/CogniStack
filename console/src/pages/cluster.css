@@ -1,0 +1,451 @@
+/* ===========================================================================
+ * 集群与多核并发工作台专属样式（前缀 cl-）
+ * 严格满屏单页设计（Zero outer scroll），完全采用 CogniStack Editorial Minimal 设计规范
+ * ======================================================================== */
+
+.cl-layout {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-3) var(--sp-6);
+  block-size: 100%;
+  box-sizing: border-box;
+  overflow: hidden;
+  min-width: 0;
+  width: 100%;
+}
+
+/* 顶部硬件拓扑指标栏：4 档紧凑指标，严控垂直占用 */
+.cl-stats-grid {
+  display: grid;
+  gap: var(--sp-3);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  flex: 0 0 auto;
+}
+
+@media (max-width: 960px) {
+  .cl-stats-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* 主双栏分割工作台：占满剩余高度，双侧卡片内部精准纵滚，视口无滚动条 */
+.cl-split-layout {
+  display: grid;
+  gap: var(--sp-3);
+  grid-template-columns: minmax(380px, 460px) minmax(0, 1fr);
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
+  align-items: stretch;
+}
+
+@media (max-width: 960px) {
+  .cl-split-layout {
+    grid-template-columns: minmax(0, 1fr);
+    overflow-y: auto;
+  }
+}
+
+/* 统一控制台工作卡片 */
+.cl-panel {
+  block-size: 100%;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: var(--surface-1);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  overflow: hidden;
+  box-shadow: var(--shadow-1);
+}
+
+.cl-panel-head {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-3);
+  min-height: 42px;
+  padding: var(--sp-2) var(--sp-4);
+  border-bottom: 1px solid var(--line);
+  background: var(--surface-2);
+  flex-wrap: wrap;
+}
+
+.cl-panel-title {
+  display: flex;
+  align-items: center;
+  gap: var(--sp-2);
+  font-size: var(--fs-h3);
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.cl-panel-title svg {
+  color: var(--brand);
+  flex: 0 0 auto;
+}
+
+.cl-panel-body {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  padding: var(--sp-4);
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-4);
+}
+
+.cl-panel-body--flush {
+  padding: 0;
+  gap: 0;
+}
+
+/* 滑块控件组合 */
+.cl-slider-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+}
+
+.cl-slider-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  font-size: var(--fs-xs);
+  color: var(--fg-2);
+}
+
+.cl-slider-val {
+  font-family: var(--font-mono);
+  font-size: var(--fs-sm);
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.cl-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 24px;
+  background: transparent;
+  outline: none;
+  cursor: pointer;
+  margin: 0;
+}
+
+.cl-slider:focus-visible {
+  outline: 2px solid var(--ring);
+  outline-offset: 2px;
+}
+
+.cl-slider::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 6px;
+  background: var(--surface-3);
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line);
+}
+
+.cl-slider::-moz-range-track {
+  width: 100%;
+  height: 6px;
+  background: var(--surface-3);
+  border-radius: var(--r-pill);
+  border: 1px solid var(--line);
+}
+
+.cl-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--ink);
+  cursor: pointer;
+  border: 2px solid var(--surface-1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  transition: transform var(--dur-1) var(--ease), background var(--dur-1) var(--ease);
+}
+
+.cl-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.15);
+  background: var(--brand);
+}
+
+.cl-slider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  background: var(--ink);
+  cursor: pointer;
+  border: 2px solid var(--surface-1);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.25);
+  transition: transform var(--dur-1) var(--ease), background var(--dur-1) var(--ease);
+}
+
+.cl-slider::-moz-range-thumb:hover {
+  transform: scale(1.15);
+  background: var(--brand);
+}
+
+/* 提示与代码段 */
+.cl-hint {
+  font-size: var(--fs-xs);
+  line-height: var(--lh-body);
+  color: var(--fg-3);
+}
+
+.cl-code-box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--sp-2);
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--surface-inset);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--fg-2);
+  overflow-x: auto;
+}
+
+/* 压测结果面板与网格 */
+.cl-bench-panel {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-3);
+  padding: var(--sp-4);
+  background: var(--surface-inset);
+  border: 1px solid var(--line);
+  border-radius: var(--r-2);
+}
+
+.cl-bench-grid {
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: var(--sp-2);
+}
+
+@media (max-width: 1000px) {
+  .cl-bench-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 600px) {
+  .cl-bench-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.cl-bench-stat {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--surface-1);
+  border: 1px solid var(--line);
+  border-radius: var(--r-1);
+}
+
+.cl-bench-label {
+  font-size: 11px;
+  color: var(--fg-3);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.cl-bench-value {
+  font-family: var(--font-mono);
+  font-size: var(--fs-title);
+  font-weight: 700;
+  color: var(--fg);
+}
+
+.cl-bench-custom-row {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--sp-3);
+  flex-wrap: wrap;
+}
+
+.cl-bench-error {
+  font-size: var(--fs-xs);
+  color: var(--bad);
+  background: var(--surface-1);
+  padding: var(--sp-2) var(--sp-3);
+  border-radius: var(--r-1);
+  border: 1px solid var(--line);
+  line-height: var(--lh-body);
+}
+
+/* 在线压测进度条 */
+.cl-progress-wrap {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-1);
+  margin-top: var(--sp-2);
+}
+
+.cl-progress-bar {
+  inline-size: 100%;
+  block-size: 6px;
+  background: var(--surface-3);
+  border-radius: var(--r-pill);
+  overflow: hidden;
+}
+
+.cl-progress-fill {
+  block-size: 100%;
+  background: var(--brand);
+  border-radius: var(--r-pill);
+  transition: inline-size var(--dur-1) var(--ease);
+}
+
+.cl-progress-text {
+  display: flex;
+  justify-content: space-between;
+  font-size: var(--fs-micro);
+  color: var(--fg-3);
+  font-family: var(--font-mono);
+}
+
+/* 压测历史对照记录 */
+.cl-bench-history {
+  display: flex;
+  flex-direction: column;
+  gap: var(--sp-2);
+  margin-top: var(--sp-1);
+}
+
+.cl-bench-history-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--surface-1);
+  border: 1px solid var(--line);
+  border-radius: var(--r-1);
+  font-size: var(--fs-xs);
+  font-family: var(--font-mono);
+  color: var(--fg-2);
+}
+
+/* CPU 核心拓扑分布矩阵 */
+.cl-topo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(84px, 1fr));
+  gap: var(--sp-2);
+}
+
+.cl-core-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  padding: var(--sp-2);
+  border-radius: var(--r-1);
+  border: 1px solid var(--line);
+  background: var(--surface-inset);
+  transition: border-color var(--dur-1) var(--ease), background var(--dur-1) var(--ease);
+  text-align: center;
+  min-height: 58px;
+}
+
+.cl-core-card[data-active="true"] {
+  background: var(--brand-soft);
+  border-color: var(--brand-line);
+}
+
+.cl-core-num {
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.cl-core-badge {
+  font-size: 10px;
+  color: var(--fg-3);
+}
+
+.cl-core-worker {
+  font-size: 10px;
+  font-weight: 600;
+  font-family: var(--font-mono);
+  color: var(--brand);
+}
+
+.cl-topo-summary {
+  display: flex;
+  gap: var(--sp-4);
+  flex-wrap: wrap;
+  padding: var(--sp-3) var(--sp-4);
+  background: var(--surface-inset);
+  border: 1px solid var(--line);
+  border-radius: var(--r-1);
+  font-size: var(--fs-xs);
+  color: var(--fg-2);
+}
+
+/* 活动进程矩阵工具条 */
+.cl-matrix-toolbar {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sp-2) var(--sp-4);
+  border-bottom: 1px solid var(--line);
+  background: var(--surface-2);
+  font-size: var(--fs-xs);
+}
+
+.cl-matrix-summary {
+  color: var(--fg-3);
+  font-size: var(--fs-xs);
+}
+
+/* Worker 负载均衡分布芯片 */
+.cl-worker-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--sp-2);
+  margin-top: var(--sp-2);
+}
+
+.cl-worker-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--sp-2);
+  padding: 2px var(--sp-3);
+  background: var(--surface-1);
+  border: 1px solid var(--line);
+  border-radius: var(--r-pill);
+  font-family: var(--font-mono);
+  font-size: var(--fs-xs);
+  color: var(--fg-2);
+}
+
+.cl-worker-chip b {
+  color: var(--brand);
+}
+
+.cl-bench-hint {
+  padding: var(--sp-2) var(--sp-3);
+  background: var(--surface-2);
+  border: 1px solid var(--line);
+  border-radius: var(--r-1);
+  font-size: var(--fs-xs);
+  color: var(--fg-2);
+  line-height: 1.5;
+  margin-bottom: var(--sp-3);
+}
+
+.cl-bench-hint strong {
+  color: var(--fg);
+}
+
