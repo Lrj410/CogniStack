@@ -95,12 +95,6 @@ dialogue · profile · lore · worldState · summaryBlocks · vectorHits
 | [examples/REFERENCE-HOSTS.md](./examples/REFERENCE-HOSTS.md) | 参考宿主与已知行为差异 |
 | [console/DESIGN.md](./console/DESIGN.md) | 控制台视觉与版式体检基线 |
 
-### 质量
-
-- 测试：`tests ` <!-- N:tests -->457<!-- /N --> · `fail ` <!-- N:tests_fail -->0<!-- /N -->（`npm test`）。
-- 门禁：`typecheck` · `api:surface:check`（公共 API 冻结）· `doc:numbers:check`（文档数字防漂移）·
-  `verify:viz-http` · `bundle:audit`；控制台另有 `qa:classes` / `qa:layout`。
-
 ### 许可
 
 [MIT](./LICENSE) © 2026 Lrj410
